@@ -1,4 +1,4 @@
-data/
+/data/
 .venv/
 dbt/target/
 dbt/logs/
