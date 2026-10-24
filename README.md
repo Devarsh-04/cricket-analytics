@@ -6,19 +6,19 @@ Ball-by-ball win probability for T20 chases (IPL, BBL and men's T20Is) built fro
 
 ## Results
 
-The model was trained on matches before 2023 and tested on 83,306 balls from matches since 2023.
+The model was trained on matches before 2023 and tested on 82,381 balls from the 723 matches since 2023.
 
 | | Brier ↓ | Log loss ↓ | AUC ↑ |
 |---|---|---|---|
-| Baseline (logistic regression) | 0.147 | 0.455 | 0.885 |
-| **Model (LightGBM, monotone)** | **0.140** | **0.426** | **0.897** |
+| Baseline (logistic regression) | 0.146 | 0.455 | 0.886 |
+| **Model (LightGBM, monotone)** | **0.139** | **0.425** | **0.898** |
 
-The model beats the baseline in every competition: IPL 0.154 vs 0.163, BBL 0.144 vs 0.150, T20I 0.124 vs 0.129.
+The model beats the baseline in every competition: IPL 0.153 vs 0.162, BBL 0.145 vs 0.151, T20I 0.123 vs 0.128.
 
 Headline findings (details in the [memo](MEMO.md)):
-- Since 2023, IPL teams chase 200+ successfully 32% of the time, up from 15%. A model trained on pre-2023 data underrates them, which matches the timing of the Impact Player rule.
+- Since 2023, IPL teams chase 200+ successfully 32% of the time, up from 16%. A model trained on pre-2023 data underrates them, which matches the timing of the Impact Player rule.
 - Death-over balls swing a chase 1.7× more than earlier balls, but the middle overs carry the largest share of total swing (41%).
-- Venue and season made the model *worse* on validation data, because the target already prices them in.
+- Venue and season made the model *worse* on validation data. This is likely because the target already reflects them, and because venue is sparse enough to overfit.
 
 ## How it works
 
@@ -26,8 +26,8 @@ Headline findings (details in the [memo](MEMO.md)):
 Cricsheet JSON ──ingest.py──▶ DuckDB raw tables
                                  │
                                 dbt: stg_matches → stg_deliveries → chase_states
-                                 │   (16 data tests: unique balls, targets reconcile,
-                                 │    ≤120 legal balls, runs add up, …)
+                                 │   (17 data tests: unique balls, targets reconcile,
+                                 │    full 20-over chases, runs add up, …)
                                  ▼
                           winprob.py  ── baseline + LightGBM, time split, calibration
                                  │
@@ -36,7 +36,7 @@ Cricsheet JSON ──ingest.py──▶ DuckDB raw tables
                      app/data/*.parquet ──▶ Streamlit dashboard
 ```
 
-- **Scope:** T20 only. T20Is are limited to matches between ICC full members. DLS, tied and no-result matches are excluded.
+- **Scope:** T20 only. T20Is are limited to matches between ICC full members. DLS, tied, no-result and pre-shortened chases are excluded.
 - **No leakage:** the train/test split is by date, and every feature describes the match state *after* that ball using only earlier balls.
 - **Model:** a LightGBM model on runs needed, balls left, wickets in hand and required rate. Monotone constraints keep it consistent with cricket logic (more balls left can never lower win probability). Terminal states, such as the target reached or the side all out, are fixed at exactly 1 or 0.
 - **Player value:** each ball's change in win probability is credited to the batter (+) and the bowler (−). This is chase-only.
@@ -58,7 +58,7 @@ pytest                            # 22 tests
 
 - The model covers the second innings only. A first-innings model is a planned extension.
 - The model is calibrated on pre-2023 cricket and underestimates IPL chasers since 2023. This is reported rather than tuned away (see the memo).
-- Economy rates include byes and leg-byes.
+- Economy rates include byes and leg-byes. Run-outs of the non-striker are credited to the striker.
 
 ## Data
 
