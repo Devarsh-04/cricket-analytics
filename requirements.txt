@@ -1,0 +1,8 @@
+duckdb
+dbt-duckdb
+pandas
+pyarrow
+scikit-learn
+lightgbm
+streamlit
+pytest
