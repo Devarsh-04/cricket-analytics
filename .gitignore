@@ -1,0 +1,8 @@
+data/
+.venv/
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+.superpowers/
+__pycache__/
+.pytest_cache/
