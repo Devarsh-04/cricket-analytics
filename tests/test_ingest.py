@@ -62,3 +62,11 @@ def test_load_replaces_existing_tables(tmp_path, monkeypatch):
     with duckdb.connect(str(db)) as con:
         assert con.sql("SELECT match_id FROM raw_matches").fetchall() == [("1001",)]
         assert con.sql("SELECT count(*) FROM raw_deliveries").fetchall()[0][0] == FIXTURE_DELIVERY_COUNT
+
+
+def test_penalty_runs_captured():
+    match = load_fixture("match_ok.json")
+    match["innings"][0]["penalty_runs"] = {"post": 5}
+    _, d = flatten_match(match, "m1", "ipl")
+    assert {r["penalty_runs"] for r in d if r["innings"] == 1} == {5}
+    assert {r["penalty_runs"] for r in d if r["innings"] == 2} == {0}

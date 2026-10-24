@@ -1,0 +1,39 @@
+version: 2
+models:
+  - name: stg_matches
+    columns:
+      - name: match_id
+        data_tests: [unique, not_null]
+      - name: competition
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["ipl", "bbl", "t20i"]
+      - name: winner
+        data_tests: [not_null]
+  - name: stg_deliveries
+    columns:
+      - name: match_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_matches')
+                field: match_id
+      - name: batter_id
+        data_tests: [not_null]
+      - name: bowler_id
+        data_tests: [not_null]
+  - name: chase_states
+    columns:
+      - name: chase_won
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+                quote: false
+      - name: target
+        data_tests: [not_null]
+      - name: wickets_in_hand
+        data_tests: [not_null]

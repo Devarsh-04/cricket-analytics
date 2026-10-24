@@ -36,6 +36,7 @@ def flatten_match(match: dict, match_id: str, competition: str) -> tuple[dict, l
     deliveries = []
     for innings_no, innings in enumerate(match.get("innings", []), start=1):
         target = innings.get("target", {})
+        penalty_runs = sum(innings.get("penalty_runs", {}).values())
         for over in innings.get("overs", []):
             for ball_seq, d in enumerate(over["deliveries"], start=1):
                 extras = d.get("extras", {})
@@ -60,6 +61,7 @@ def flatten_match(match: dict, match_id: str, competition: str) -> tuple[dict, l
                     "wicket_kind": wickets[0]["kind"] if wickets else None,
                     "target_runs": target.get("runs"),
                     "target_overs": target.get("overs"),
+                    "penalty_runs": penalty_runs,
                     "is_super_over": bool(innings.get("super_over", False)),
                 })
     return row, deliveries

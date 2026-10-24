@@ -1,0 +1,7 @@
+cricket:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: ../data/cricket.duckdb
+      threads: 4

@@ -1,0 +1,7 @@
+name: cricket
+version: "1.0.0"
+profile: cricket
+model-paths: ["models"]
+models:
+  cricket:
+    +materialized: table
