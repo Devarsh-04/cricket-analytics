@@ -67,7 +67,7 @@ with match_tab:
 
 with model_tab:
     st.write(
-        "Trained on matches before 2023, tested on matches from 2023 on. "
+        "Trained on matches before 2025, tested on matches from 2025 on. "
         "Baseline = logistic regression on runs needed, balls left and wickets in hand."
     )
     rows = []
@@ -88,9 +88,9 @@ with model_tab:
     )
     st.subheader("Calibration — when the model says 70%, does the team win 70% of the time?")
     st.altair_chart(diagonal + cal, width="stretch")
-    st.subheader("Does venue or season help? (validation on 2022, before touching the test set)")
+    st.subheader("Does venue or season help? (validation on 2024, before touching the test set)")
     st.dataframe(
-        pd.DataFrame(metrics["ablation_validation_2022"]).T[["brier", "log_loss", "auc"]].round(4)
+        pd.DataFrame(metrics["ablation_validation_2024"]).T[["brier", "log_loss", "auc"]].round(4)
         .rename(index={"model": "model (situation only)"}),
     )
 

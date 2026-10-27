@@ -19,7 +19,7 @@ ABLATION_FEATURES = {
 }
 BASELINE_FEATURES = ["runs_needed", "balls_remaining", "wickets_in_hand"]
 CATEGORICAL = ["venue_clean", "competition"]
-CUTOFF = "2023-01-01"
+CUTOFF = "2025-01-01"
 OUT_DIR = Path("app/data")
 
 
@@ -56,7 +56,7 @@ def fit_model(train: pd.DataFrame, features: list[str] = FEATURES) -> LGBMClassi
     return model.fit(_matrix(train, features), train.chase_won)
 
 
-def ablation(train: pd.DataFrame, cutoff: str = "2022-01-01") -> dict:
+def ablation(train: pd.DataFrame, cutoff: str = "2024-01-01") -> dict:
     fit_part, valid = time_split(train, cutoff)
     variants = {"baseline": fit_baseline(fit_part), "model": fit_model(fit_part)}
     variants |= {name: fit_model(fit_part, f) for name, f in ABLATION_FEATURES.items()}
@@ -126,14 +126,14 @@ def main() -> None:
         metrics[name] = evaluate(test.chase_won, p, test.competition)
         calibration.append(calibration_table(test.chase_won, p).assign(model_name=name))
 
-    metrics["ablation_validation_2022"] = ablation(train)
+    metrics["ablation_validation_2024"] = ablation(train)
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     (OUT_DIR / "metrics.json").write_text(json.dumps(metrics, indent=2))
     pd.concat(calibration).to_parquet(OUT_DIR / "calibration.parquet", index=False)
     with_predictions(models["model"], states).to_parquet(OUT_DIR / "predictions.parquet", index=False)
     print(json.dumps({k: metrics[k]["overall"] for k in models}, indent=2))
-    print(json.dumps(metrics["ablation_validation_2022"], indent=2))
+    print(json.dumps(metrics["ablation_validation_2024"], indent=2))
 
 
 if __name__ == "__main__":

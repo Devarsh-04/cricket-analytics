@@ -13,7 +13,7 @@ def _synthetic():
     rng = np.random.default_rng(0)
     rows = []
     for i in range(200):
-        date = pd.Timestamp("2020-01-01") + pd.Timedelta(days=int(i * 9))
+        date = pd.Timestamp("2022-01-01") + pd.Timedelta(days=int(i * 9))
         target = int(rng.integers(130, 200))
         for ball in range(20):
             balls_remaining = int(rng.integers(1, 120))
@@ -49,7 +49,7 @@ def fitted_model():
 
 def test_time_split_no_leakage():
     train, test = time_split(synthetic_states())
-    assert train.start_date.max() < pd.Timestamp("2023-01-01") <= test.start_date.min()
+    assert train.start_date.max() < pd.Timestamp("2025-01-01") <= test.start_date.min()
     assert set(train.match_id).isdisjoint(test.match_id)
 
 
@@ -103,3 +103,10 @@ def test_monotone_in_match_situation():
     assert (np.diff(p) >= 0).all()
     more_runs = pd.concat([row.assign(runs_needed=r, balls_remaining=60, required_run_rate=r / 10) for r in range(10, 150, 5)])
     assert (np.diff(predict(fitted_model(), more_runs)) <= 0).all()
+
+
+def test_cutoff_is_2025():
+    import inspect
+    import winprob
+    assert winprob.CUTOFF == "2025-01-01"
+    assert inspect.signature(winprob.ablation).parameters["cutoff"].default == "2024-01-01"
