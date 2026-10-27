@@ -11,7 +11,7 @@ m, d = load.matches(), load.deliveries()
 st.title("Matches")
 
 qid = st.query_params.get("id")
-if qid in set(m.match_id) and st.session_state.get("loaded_id") != qid:
+if qid in set(m.match_id) and ("match" not in st.session_state or st.session_state.get("loaded_id") != qid):
     pre = m[m.match_id == qid].iloc[0]
     st.session_state.update(comp=pre.competition, season=pre.season, team=ALL_TEAMS, match=qid, loaded_id=qid)
 

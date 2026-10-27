@@ -10,7 +10,8 @@ st.title("Teams")
 
 q = st.query_params
 key = (q.get("comp"), q.get("team"))
-if key[0] in load.COMPETITIONS and st.session_state.get("loaded_team") != key:
+if key[0] in load.COMPETITIONS and ("team_name" not in st.session_state
+                                   or st.session_state.get("loaded_team") != key):
     comp_teams = m_all[m_all.competition == key[0]]
     if key[1] in set(comp_teams.team1) | set(comp_teams.team2):
         st.session_state.update(team_comp=key[0], team_name=key[1], loaded_team=key)
@@ -37,7 +38,7 @@ def record_text(r: dict) -> str:
 
 def win_pct(r: dict) -> str:
     decided = r["played"] - r["nr"]
-    share = f"{r['won'] / decided:.0%} won of {r['played']}" if decided else f"{r['played']} played"
+    share = f"{r['won'] / decided:.0%} of {decided} decided" if decided else f"{r['played']} played"
     return share + extras(r)
 
 

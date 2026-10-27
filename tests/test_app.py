@@ -73,3 +73,29 @@ def test_team_page_bad_team():
     at = page("views/team.py", comp="ipl", team="Foo")
     assert not at.exception
     assert len(at.selectbox) >= 2
+
+
+def test_match_link_reopened_after_other_page():
+    at = page("views/match.py", id="897697")
+    at.switch_page("views/home.py").run()
+    at.switch_page("views/match.py")
+    at.query_params.clear()
+    at.query_params.update(id="897697")
+    at.run()
+    assert at.header[0].value == "Adelaide Strikers v Melbourne Stars"
+
+
+def test_team_link_reopened_after_other_page():
+    at = page("views/team.py", comp="bbl", team="Hobart Hurricanes")
+    at.switch_page("views/home.py").run()
+    at.switch_page("views/team.py")
+    at.query_params.clear()
+    at.query_params.update(comp="bbl", team="Hobart Hurricanes")
+    at.run()
+    assert at.header[0].value == "Hobart Hurricanes"
+
+
+def test_win_pct_names_its_denominator():
+    at = page("views/team.py", comp="ipl", team="Royal Challengers Bengaluru")
+    overall = next(m for m in at.metric if m.label == "Overall")
+    assert "of 283 decided" in overall.delta
