@@ -2,7 +2,7 @@
 
 Ball-by-ball win probability for T20 chases (IPL, BBL and men's T20Is) built from 1.27M deliveries. It is a tested SQL pipeline feeding a calibrated model, with player value built on top.
 
-**Live app:** _coming soon_ · **Findings:** [MEMO.md](MEMO.md)
+**Live app:** [devarsh-cricket-winprob.streamlit.app](https://devarsh-cricket-winprob.streamlit.app) · **Findings:** [MEMO.md](MEMO.md)
 
 ## Results
 
