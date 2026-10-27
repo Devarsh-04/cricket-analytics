@@ -50,6 +50,7 @@ python3 ingest.py                 # downloads Cricsheet data (~22 MB) into data/
 cd dbt && dbt build && cd ..      # builds and tests the models
 python3 winprob.py                # trains, evaluates, writes app/data/
 python3 player_value.py
+python3 export_app.py             # writes the app's match, ball and findings files
 streamlit run app/streamlit_app.py
 pytest                            # 22 tests
 ```

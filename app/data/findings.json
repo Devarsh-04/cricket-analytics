@@ -1,0 +1,18 @@
+{
+  "ipl_200_chases": {
+    "before_2023": {
+      "won": 15,
+      "n": 97
+    },
+    "since_2023": {
+      "won": 40,
+      "n": 124
+    }
+  },
+  "swing_per_ball": {
+    "powerplay": 1.4,
+    "middle": 1.3,
+    "death": 2.2
+  },
+  "wicket_cost": 6.9
+}
