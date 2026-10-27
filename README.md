@@ -4,6 +4,8 @@ Ball-by-ball win probability for T20 chases (IPL, BBL and men's T20Is) built fro
 
 **Live app:** [devarsh-cricket-winprob.streamlit.app](https://devarsh-cricket-winprob.streamlit.app) · **Findings:** [MEMO.md](MEMO.md)
 
+![Match page: win chance through a chase, with wickets and turning points](docs/match-page.jpg)
+
 ## Results
 
 The model was trained on matches before 2025 and tested on 40,387 balls from the 358 matches in 2025 and 2026.
