@@ -54,3 +54,22 @@ def test_match_page_bad_id():
     at = page("views/match.py", id="nope")
     assert not at.exception
     assert len(at.selectbox) >= 4
+
+
+def test_team_page_rcb():
+    at = page("views/team.py", comp="ipl", team="Royal Challengers Bengaluru")
+    assert not at.exception
+    assert len(at.dataframe) >= 1
+    assert "Chennai Super Kings" in text(at) or any("Chennai" in str(df.value) for df in at.dataframe)
+
+
+def test_team_page_short_lived_team():
+    at = page("views/team.py", comp="ipl", team="Kochi Tuskers Kerala")
+    assert not at.exception
+    assert "No matches since 2023" in text(at)
+
+
+def test_team_page_bad_team():
+    at = page("views/team.py", comp="ipl", team="Foo")
+    assert not at.exception
+    assert len(at.selectbox) >= 2
