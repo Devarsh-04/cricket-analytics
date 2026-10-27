@@ -29,6 +29,8 @@ def flatten_match(match: dict, match_id: str, competition: str) -> tuple[dict, l
         "winner": outcome.get("winner"),
         "result": outcome.get("result"),
         "method": outcome.get("method"),
+        "eliminator": outcome.get("eliminator"),
+        "season": str(info["season"]),
         "overs": info.get("overs"),
         "gender": info.get("gender"),
     }

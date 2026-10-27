@@ -70,3 +70,16 @@ def test_penalty_runs_captured():
     _, d = flatten_match(match, "m1", "ipl")
     assert {r["penalty_runs"] for r in d if r["innings"] == 1} == {5}
     assert {r["penalty_runs"] for r in d if r["innings"] == 2} == {0}
+
+
+def test_flatten_captures_season():
+    m, _ = flatten_match(load_fixture("match_ok.json"), "m1", "ipl")
+    assert m["season"] == "2023"
+
+
+def test_flatten_captures_eliminator():
+    match = load_fixture("match_ok.json")
+    match["info"]["outcome"] = {"result": "tie", "eliminator": "Mumbai Indians"}
+    m, _ = flatten_match(match, "m1", "ipl")
+    assert m["eliminator"] == "Mumbai Indians"
+    assert m["winner"] is None
