@@ -57,7 +57,7 @@ python3 winprob.py                # trains, evaluates, writes app/data/
 python3 player_value.py
 python3 export_app.py             # writes the app's match, ball and findings files
 streamlit run app/streamlit_app.py
-pytest                            # 53 tests
+pytest                            # 56 tests
 ```
 
 ## Limits
